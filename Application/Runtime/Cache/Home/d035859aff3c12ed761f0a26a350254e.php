@@ -1,0 +1,619 @@
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>用户概览</title>
+	<!-- jQuery -->
+	<link rel="stylesheet" href="/databasework/Public/index/css/index.css">
+	<script type="text/javascript" src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+	<!-- bootstrap -->
+	
+	<script type="text/javascript" src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"></script>
+	<script type="text/javascript" src="./public/js/common.js"></script>
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<!-- datapicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+	<script>
+	  $(function() {
+	    $( "#datepicker" ).datepicker();
+	  });
+	</script>
+
+	<style type="text/css">
+	.a{
+	margin-left: auto;
+	margin-right: 10px;
+	display: block;
+	float: right;
+	margin-top: 25px;
+	font-size:15px;
+	}
+	
+	.top{
+	margin-top:0px;
+	height: 50px;
+	width: 100%;
+	background-color: #003333;
+	/*position: fixed;*/
+
+	}	
+	
+	/*总背景*/
+	*{
+		margin: 0px;
+		padding:0px;
+	}
+	body{
+		background-color: #ECF0F5;
+	}
+	/*section开始*/
+	.main{
+		width: 100%;
+		height: 100%;
+		/*background-color: #ECF0F5*/
+	}
+	/*右上信息概览*/
+	.showTop{
+		/*width: 96%;*/
+		height: 600px;
+		/*height: 70%;*/
+		margin: 18px auto;
+		border-radius: 4px;
+		/*border:3px white solid;*/
+		border-top: 4px #3c8dbc solid;
+		background-color: white;
+		position: relative;
+	}
+	/*设置所有输入框上的lable、输入框背景为白色*/
+	label{
+		background-color: white;
+		font-weight: 700;
+	}
+	.row,.form-group,.col-md-6,.col-md-12{
+		background-color: white;
+	}
+	/*设置所有输入框标准宽度*/
+	.row{
+		width: 95%;
+		margin: 3px auto;
+	}
+
+	/*左侧头像*/
+	.showImg{
+		margin: 18px auto;
+	}
+	.avatar-container {
+	    position: relative;
+	    height: 200px;
+	    margin-bottom: 20px;
+	    /*background-color: red;*/
+	}
+	.avatar-container img {
+	    display: inline-block;
+    	border: none;
+	    transform: translate(-50%);
+	    position: absolute;
+	    left: 50%;
+	}
+	.img-circle {
+	    border-radius: 50%;
+	}
+	.avatar-container .img-mask{
+	    /*transition: opacity .4s linear;*/
+	    position: absolute;
+	    border-radius: 50%;
+	    left: 50%;
+	    /*transform: translate(-50%);*/
+	    width: 200px;
+	    height: 200px;
+	    background-color: #000;
+	    opacity: 0;
+	    cursor: pointer;
+	    text-align: center;
+	}
+	.avatar-container #uploadForm button{
+		position: absolute;
+		right: 5%;
+		bottom: 5px;
+	}
+	
+	/*头部标题*/
+	/*#noteTitle{
+		background-color: white;
+		position: absolute;
+		left: 10px;
+		font-weight: bold;
+		font-size: 18px;
+	}*/
+	/*表单*/
+	.showTop form{
+		background-color: white;
+		width: 98%;
+		position: absolute;
+		top:20px;
+		left: 1%;
+  		border-collapse:collapse!important;
+	}
+	.help-block{
+		background-color: white;
+		color: #dd4b39;
+	}
+	/*所有的修改密码修改手机修改邮箱*/
+	
+	.label{
+
+	}
+	/*手机已验证标签*/
+	.bg-green{
+		background-color: #00a65a!important;
+	}
+	/*性别单选框*/
+	.radio{
+		background-color: white;
+	}
+	.sex{
+		margin-right: 20px;
+	}
+	/*提交按钮*/
+	.button-wrapper{
+		text-align: center;
+		/*width: 50%;*/
+	}
+	/*modal*/
+	.editPassword{
+		/*background-color: white;*/
+	}
+
+	/*.help-block{
+		background-color: red;
+	}*/
+	</style>
+	<script type="text/javascript">
+// 上传头像
+	function upload(){
+		document.getElementById('uploadForm').submit();
+	}
+
+// 验证用户名是否重复
+	function isUser_login(value){
+		$.ajax({
+              type:"GET",
+              url:"<?php echo U('Home/login_ajax');?>",
+              dataType:"json",
+              data:{"value":value},
+              success:function(data){
+              	if(data==0){
+              		document.getElementById('user_login').innerHTML="用户名不能重复";
+              	}
+              	else{
+              		document.getElementById('user_login').innerHTML="";
+              	}
+              },
+              error:function(){
+                 // alert("Error!");
+              }
+           });
+	}
+	// 验证输入的原始密码是否正确
+	function isPassword(value){
+		$.ajax({
+              type:"GET",
+              url:"<?php echo U('Home/change_password');?>",
+              dataType:"json",
+              data:{"text":value},
+              success:function(data){
+              	 // alert(data);
+              	if(data==0){
+              		document.getElementById('oldPass').innerHTML="原始密码错误";
+              	}
+              	else{
+              		document.getElementById('oldPass').innerHTML="";
+              	}
+              },
+              error:function(){
+              	alert(value);
+
+                 alert("Error!");
+                 // alert(data);
+              }
+           });
+	}
+
+
+// 验证两次输入的密码是否一致
+	$(document).ready(function(){
+			$("#passwordForm").submit(function(e){
+				var str1 = $("#words").val();
+				var str2 = $("#rewords").val();
+				if(str1!=str2){
+					$("#rewordsSpan").text("两次密码输入不一致");
+					return false;				
+				}
+				else{
+					$("#rewordsSpan").text("");
+					return true;
+				}
+			});
+		});
+
+// 验证邮箱是否合法
+	function isEmail(){
+		var str = document.getElementById('emailInput').value;
+		var reg=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+		if(!reg.test(str)){
+			document.getElementById('isEmailFair').innerHTML="邮箱输入不合法";
+			return false;
+		}
+		else{
+			document.getElementById('isEmailFair').innerHTML="";
+			return true;
+		}
+	}
+
+// 验证手机号是否合法
+	function isPhone(){
+		var str = document.getElementById('phoneInput').value;
+		// console.log(str);
+		var reg= /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+		if(!reg.test(str)){
+			document.getElementById('isPhoneFair').innerHTML="手机号输入不合法";
+			return false;
+		}
+		else{
+			document.getElementById('isPhoneFair').innerHTML="";
+			return true;
+		}
+	}
+	function look(id){
+            // window.location.href = 'http://localhost/databasework/index.php/Home/Home/home';
+      window.location.href = 'http://localhost/databasework/index.php/Home/Home/look?id='+id;
+    }
+	</script>
+
+
+
+
+</head>
+<body>
+	<div class="top" style="background-color:#444444">
+	<h1 class=h>&nbsp;&nbsp;&nbsp;写下心情，客云便签	</h1>
+	<form action="<?php echo U('Home/home');?>" method="get" class="ff">
+	<div class="go">
+	<div class="col-lg-6">
+    <div class="input-group">
+    	 
+    	<!-- <form action=""> -->
+
+      <input type="text" class="form-control" placeholder="Search in keyun..." name="sreach" style="margin-top:8px;height:30px;opacity: 0.8;">
+
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit" style="margin-top:8px;height:30px;opacity: 0.8;margin-right:200px;"  >Go!</button>
+      </span>
+     	 <!-- </form> -->
+    </div><!-- /input-group -->
+  	</div><!-- /.col-lg-6 -->
+  	</div>
+  	</form>
+
+	<div class=a>
+	<a href="<?php echo U('Home/home');?>"  >进入大厅</a>
+	<a href="<?php echo U('Index/index');?>"> 登陆</a>
+	<a href="<?php echo U('Index/register');?>" >注册</a>
+	<a href="<?php echo U('Home/about');?>" >关于客云</a>
+	</div>
+
+
+	</div><!--top-->
+	<br></br>
+<section class="main">
+	<!-- <h3 id="noteTitle">用户概览</h3> -->
+	<!-- 左侧头像 -->
+	<div class="showImg col-md-4 col-sm-4 col-xs-12">
+		<div class="avatar-container">
+		<!-- 	./data/Upload/user_header/1.png  -->
+	
+			<img src="/databasework/<?php echo ($a[0]["header"]); ?>" height="200" width="200" class="img-circle" alt="用户头像">
+			
+				<!-- <label for="exampleInputFile">上传头像</label> -->
+			<form id="uploadForm" action="<?php echo U('Home/upload');?>" method="post" enctype="multipart/form-data">
+				<button type="button" class="btn btn-primary"  onclick="upload1.click();">
+					<!-- <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> -->上传头像</button>
+				<input style="display: none;" type="file" name="file" id="upload1"  onchange="upload()">
+			</form>
+			
+		</div>
+		<div style="margin-top:100px;margin-right:250px">
+			<a href="" data-toggle="modal" data-target=".Password">
+			<button type="button" class="btn btn-default btn-primary">我的留言</button></a>
+			<br></br>
+			<a href="" data-toggle="modal" data-target=".friends">
+
+			<button type="button" class="btn btn-default btn-primary">我的好友</button></a>
+			<br></br>
+			<a href="http://localhost/databasework/index.php/Home/Home/my" >
+			<button type="button" class="btn btn-default btn-primary">我的发帖</button></a>
+		</div>
+	</div>
+
+	<!-- 右侧用户信息 -->
+	<div class="showTop col-md-6 col-sm-7 col-xs-12">
+		<br>
+		<div class="png" style="margin-top:px;text-align: center;">
+		
+
+		<img src="/databasework/Public/index/img/11.png" alt="">
+		</div>
+
+	
+	<form method="post" action="<?php echo U('Home/change');?>" onsubmit="return isShow()" style="margin-top:90px">
+		
+
+		<div class="row">
+	
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+			   <label for="exampleInputPassword1">密码</label>
+			   <a href="" data-toggle="modal" data-target=".editPassword">修改密码</a>
+			   <input type="password" class="form-control" id="exampleInputPassword1" name="user_pass" value="<?php echo ($a[0]["passw"]); ?>" disabled="disabled">
+			</div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+			   <label for="exampleInputEmail1">邮箱</label>
+			   <a href="" data-toggle="modal" data-target=".editEmail">修改邮箱</a>
+			   <input type="email" class="form-control" id="exampleInputEmail1" name="user_email" value="<?php echo ($a[0]["email"]); ?>" disabled="disabled">
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+			   <label>手机</label>
+			   <small class="label  bg-green">已验证</small>
+			   <a href="" data-toggle="modal" data-target=".editPhone">修改手机</a>
+			   <input type="text" class="form-control" name="phone" value="<?php echo ($a[0]["phone"]); ?>" disabled="disabled">
+			</div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+				<label>用户名</label>
+			   	<input type="text" class="form-control" name="user_login" value="<?php echo ($a[0]["username"]); ?>" placeholder="请输入用户名" onblur="isUser_login(this.value)">
+			   	<!-- <input type="text" class="form-control" name="user_login" value="<?php echo ($a[0]["user_login"]); ?>" placeholder="请输入用户名" id="userInput"> -->
+			   	<span class="help-block" id="user_login" style="text-align: center;"></span>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+				<label>性别</label>
+				<select class="form-control" name="sex" value="<?php echo ($a[0]["sex"]); ?>" placeholder="请选择性别">
+				<?php if($a[0]['sex'] == 0): ?><option value='0' selected="selected">保密</option>
+					<option value='1'>男</option>
+					<option value='2'>女</option>
+				<?php elseif($a[0]['sex'] == 1): ?>
+					<option value='0'>保密</option>
+					<option value='1' selected="selected">男</option>
+					<option value='2'>女</option>
+				<?php else: ?>
+					<option value='0'>保密</option>
+					<option value='1'>男</option>
+					<option value='2' selected="selected">女</option><?php endif; ?>
+				</select>
+				
+			</div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+				<label>生日</label>
+			   	<input type="text" class="form-control" id="datepicker" name="birthday" value="<?php echo ($a[0]["birthday"]); ?>" placeholder="选择日期">
+			</div>
+		</div>
+
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="form-group">
+				<label>昵称</label>
+			   	<input type="text" class="form-control" id="qqInput" name="nickname" value="<?php echo ($a[0]["nickname"]); ?>" placeholder="请输入昵称">
+			   	<span class="help-block" id="qqSpan" style="text-align: center;"></span>
+			</div>
+		</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label>个性签名</label>
+				<textarea class="form-control" rows="3" name="signature" placeholder="请输入个性签名"><?php echo ($a[0]["signature"]); ?></textarea>
+			</div>
+		</div>
+		</div>
+		<div class="row button-wrapper">
+			<button type="submit" class="btn btn-default btn-primary">提交</button>
+		</div>
+		
+	</form>
+
+
+
+
+	</div>
+
+<!-- 修改密码Modal -->
+<div class="modal fade editPassword" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			    <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo U('Home/change_password');?>" id="passwordForm">
+					<div class="form-group">
+						 <input type="password" name="oldPassword" placeholder="请输入原始密码" class="form-control" onblur="isPassword(this.value)" required="required">
+						<!-- <input type="password" name="oldPassword" placeholder="请输入原始密码" class="form-control">  -->
+						<span class="help-block" style="text-align: center;" id="oldPass"></span>
+					</div>
+
+					<div class="form-group">
+						<input type="password" name="newPassOne" id="words" placeholder="请输入新密码" class="form-control">
+					</div>
+					
+					<div class="form-group">
+						<input type="password" name="newPassTwo" placeholder="确认新密码" class="form-control" id="rewords">
+						<span class="help-block" style="text-align: center;" id="rewordsSpan"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">确定</button>
+					    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade friends" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="width:60%;height:630px;margin:auto">
+	<div class="modal-dialog modal-sm" role="document" style="width:100%;">
+		<div class="modal-content">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			    <h4 class="modal-title" id="myModalLabel">我的好友</h4>
+			    
+			</div>
+			<div class="modal-body" style="width:500px;">
+				<?php if(is_array($c)): foreach($c as $key=>$vo): ?><div  style="width:%;background-color:;margin-top:px;">
+					<div>
+						<div>
+							
+						<a href="#" onclick="look(<?php echo ($vo['c2']); ?>)"><div><img src="/databasework/<?php echo ($vo['header']); ?>" height="50" width="50" class="img-circle" alt="用户头像" style="margin-top:20px;margin-right:410px;"></div></a><?php echo ($vo['nickname']); ?>
+						
+						</div>
+						<div style="width:100%;margin-top:10px ">
+						<h4 style="margin-left:100px"><?php echo ($vo['signature']); ?></h4>
+				
+						</div>
+
+						
+					</div>
+					
+
+				</div>
+			<hr><?php endforeach; endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end-Modal -->
+<div class="modal fade Password" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="width:50%;height:630px;margin:auto">
+	<div class="modal-dialog modal-sm" role="document" style="width:100%;">
+		<div class="modal-content">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			    <h4 class="modal-title" id="myModalLabel">留言</h4>
+			    
+			</div>
+			<div class="modal-body" style="width:800px;">
+				<?php if(is_array($b)): foreach($b as $key=>$vo): ?><div  style="width:%;background-color:;margin-top:px;">
+					<div>
+						<div>
+						<a href="#" onclick="look(<?php echo ($vo['uid']); ?>)"><img src="/databasework/<?php echo ($vo['header']); ?>" height="50" width="50" class="img-circle" alt="用户头像" style="margin-top:20px;margin-right:700px;"></a><br></br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo ($vo['nickname']); ?>
+						
+						</div>
+						<div style="width:100%;margin-top:10px ">
+						<h4 style="margin-left:40%"><?php echo ($vo['content']); ?></h4>
+						<h4 style="margin-left:500px"><?php echo ($vo['create_time']); ?></h4>
+
+						</div>
+
+						
+					</div>
+					
+
+				</div>
+				<hr><?php endforeach; endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 修改邮箱Modal -->
+<div class="modal fade editEmail	" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			    <h4 class="modal-title" id="myModalLabel">修改邮箱</h4>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo U('Home/change_email');?>" onsubmit="return isEmail()">
+					<div class="form-group has-success">
+						<input type="text" name="email" placeholder="请输入邮箱地址" class="form-control" id="emailInput"> 
+						<span class="help-block" id="isEmailFair" style="text-align: center;"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">确定</button>
+					    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end-Modal -->
+<!-- 修改手机Modal -->
+<div class="modal fade editPhone" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			    <h4 class="modal-title" id="myModalLabel">修改手机</h4>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo U('Home/change_phone');?>" onsubmit="return isPhone()">
+					<div class="form-group has-success">
+						<input type="text" name="phone" placeholder="请输入手机号" class="form-control" id="phoneInput"> 
+						<span class="help-block" id="isPhoneFair" style="text-align: center;"></span>
+					</div>
+					<!-- <div class="form-group">
+						<input type="text" name="checkWord" placeholder="请输入验证码" class="form-control" style="display: inline-block; "> 
+						<input type="button" value="获取短信验证码" class="btn btn-primary" style="vertical-align: baseline; float: right">
+					</div> -->
+
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" name="submit">确定</button>
+					    <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end-Modal -->
+
+
+</section>
+
+		<div class="footer" style="margin-top:50%">
+			<div style="margin-left:190px;position:absolute;">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="#" class=b>享受心情，客运便签&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			<a target="_blank" href="#" class=b>享受心情，客云便签|&nbsp;</a>
+			</div>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em class=fl>COPYRIGHT &copy; 1996 &ndash; 2017 wayne. ALL RIGHTS RESERVED.</em>
+		</div>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+*{
+	/*overflow:hidden /*取消滚动条*/
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	text-decoration: none;
+}
+.container-fluid {
+	width: 100%;
+	
+	margin: 0;
+	padding: 0;
+}
+.subContainer {
+	margin: 0;
+	padding: 0;
+	height: 800px;
+	background: url(../imgs/bac.jpg) no-repeat;
+	background-size: cover;
+    background-position: center;
+}
+/*导航栏*/
+.nav {
+	width:100%;
+	height: 8%;
+	margin: 0 auto;
+	top: 0;
+	background-color: #fff;
+	z-index: 100;
+
+}		
+
+	.subContainer #blank {
+		height: 29%;
+		width: 100%;
+	}	
+	.subContainer #goto {
+		height: 8%;
+		width: 100%;
+	}
+	
+	
+
+	#name {
+		float: left;
+		margin-left: 8%;
+		font-size: 40px;
+		font-family: '宋体';
+		color: #000;
+	}
+
+	/*css3特效*/
+	#logo img
+	{
+		float: left;
+		width:180px;
+		height:180px;
+		background:red;
+		position:relative;
+		animation-name:myfirst;
+		animation-duration:5s;
+		animation-timing-function:linear;
+		animation-delay:2s;
+		animation-iteration-count:infinite;
+		animation-direction:alternate;
+		animation-play-state:running;
+		/* Safari and Chrome: */
+		-webkit-animation-name:myfirst;
+		-webkit-animation-duration:2s;
+		-webkit-animation-timing-function:linear;
+		-webkit-animation-delay:0.1s;
+		-webkit-animation-iteration-count:infinite;
+		-webkit-animation-direction:alternate;
+		-webkit-animation-play-state:running;
+	}
+
+	@keyframes myfirst
+	{
+		0%   {background:red; left:0px; top:0px;}
+		100%  {background:yellow; left:100px; top:0px;}
+	}
+	#user_register,#user_login,#login {
+		float: right;
+		margin-top: 14px;
+		z-index: 120;
+		width: 10%;
+	}
+	#user_login,#login {
+		margin-right: 2%;
+	}
+
+.main {
+	width: 100%;
+	margin-top: -12%;
+	background: #F2F2F2;
+	overflow: hidden;
+}
+.side {
+	width: 20%;
+	height: 1000px;
+	margin-left: 2%;
+	float: left;
+	background-color: #fff;
+}
+	 #column {
+		height: 55%;
+		width: 100%;
+		margin: 0 auto;
+		padding-top: 8%;
+	}
+
+		#column li img {
+			width: 60px;
+			height: 60px;
+			display: block;
+			border:2px solid #258DF2;
+			border-radius: 10px 0 10px 0;
+			padding-right: 2px;
+			margin-right: 10px;
+			margin-top: 10px;
+			float: left;
+
+		}
+		#column li img:hover {
+			opacity: 0.5;
+		}
+/*帖子*/
+.wrapper {
+	width: 50%;
+	height: 1000px;
+	margin-left: 14%;
+	background-color: #fff;
+	float: left;
+}
+	.wrapper #menu {
+		width: 100%;
+		height: 5%;
+		
+	}
+	.wrapper .page {
+		margin-left: 35%;
+	}
+	#menu #find {
+		float: left;
+		width: 10%;
+		height: 20%;
+		margin-left: 2%;
+		margin-top: 2%;
+	}
+	#menu #list {
+		float: right;
+		width: 30%;
+		height: 80%;
+	}
+
+	.wrapper .message {
+		width: 100%;
+		height: 200px;
+		border-top: 1px solid #ccc;
+		font-size: 20px;
+		font-weight: normal;
+	}
+	.wrapper .message img{
+		width: 50px;
+		height: 50px;
+		margin-top: 2%;
+		margin-left: 2%;
+	}
+	/*文章*/
+	.header {
+		width: 12%;
+		height: 100%;
+		float: left;
+		padding-top: 2%;
+		padding-left: 2%;
+		
+	}
+	 .pinfo{
+			width: 200px;
+			height: 300px;
+			display: none;
+			background: #ccc;
+			opacity: 0.6;
+			position: relative;
+			left: 10px;
+			top: 10px;
+		}
+	.content {
+		width: 87%;
+		height: 100%;
+		float: left;
+		
+	}
+	.content a:hover {
+		text-decoration: none;
+	}
+	.comment {
+		margin-top: 20%;
+		font-size: 15px;
+	}
+	.content .title {
+		width: 100%;
+		height: 16%;
+		padding-left: 5%;
+		padding-top: 4%;
+
+	}
+	.comment .good {
+		float: right;
+		padding-left: 20px;
+	}
+	.comment .strap {
+		float: right;
+	}
+	.comment .time {
+		color: #337AB7;
+		float: right;
+		margin-left: 20px;
+	}
+	.comment a {
+
+	}
+	.comment a:hover {
+		background-color: #ccc;
+
+	}
+
+
+        #news ul,span{  margin:0;padding: 0;}
+        #news{ width: 600px;height: 35%;border: 1px solid darkgrey;margin: 0px auto; position: relative;overflow: hidden;}
+        #news ul.box{ width: 3000px;height: 100%;list-style: none;-overflow: hidden;position: absolute }
+        #news li{
+            float: left;
+            height:100%;
+            width: 600px;
+        }
+        #control{
+            position: absolute;
+            width: 150px;
+            height: 24px;
+            right: 8px;
+            bottom: 8px;
+            text-align: right;
+        }
+
+        #control span{
+            display: inline-block;
+            background-color: #666;
+            color: #fff;
+            text-align: center;
+            line-height: 24px;
+            height: 100%;
+            width: 24px;
+            margin-left: 4px;
+        }
+        #control .active{
+            color: #fff;
+            background-color: red;
+        }
+.footer {
+	width: 100%;
+	height: 100px;
+	padding-top: 20px;
+	background-color: #ccc;
+	text-align: center;
+	clear: both;
+}
+#user {
+	width: 100%;
+	height: 15px;
+}
+
+
+
+
+	 
